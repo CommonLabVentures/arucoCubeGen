@@ -2,6 +2,16 @@
 
 This target generates a hollow calibration cube and matching ArUco marker plates for 3D printing.
 
+## Renders
+
+Cube render:
+
+![ArUco cube render](../../images/cube_render.png)
+
+Plate render:
+
+![ArUco plate render](../../images/plate_render.png)
+
 ## What It Produces
 
 - Hollow cube with five recessed faces
