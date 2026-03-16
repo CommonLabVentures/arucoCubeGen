@@ -12,6 +12,12 @@ def _build_cube_target() -> BaseTarget:
     return CubeTarget()
 
 
+def _build_aruco_plate_target() -> BaseTarget:
+    from .targets.aruco_plate.adapter import ArucoPlateTarget
+
+    return ArucoPlateTarget()
+
+
 @dataclass(frozen=True)
 class RegisteredTarget:
     name: str
@@ -20,6 +26,11 @@ class RegisteredTarget:
 
 
 _TARGETS: dict[str, RegisteredTarget] = {
+    "aruco_plate": RegisteredTarget(
+        name="aruco_plate",
+        description="Rectangular single-marker ArUco plate with separate white and black AMS-ready STL bodies.",
+        factory=_build_aruco_plate_target,
+    ),
     "cube": RegisteredTarget(
         name="cube",
         description="Existing hollow cube plus marker plate outputs.",
