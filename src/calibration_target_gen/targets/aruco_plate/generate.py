@@ -3,14 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from .board import build_marker_metrics, save_preview_image
+from .board import build_marker_metrics, render_preview_image, save_preview_image
 from .config import ArucoPlateConfig
 from .geometry import create_black_inlay_mesh, create_white_plate_mesh
 from ...shared.render import (
-    DEFAULT_ACCENT_RGB,
-    DEFAULT_BODY_RGB,
-    PreviewMesh,
-    save_render_preview,
+    save_plate_render_preview,
 )
 
 
@@ -23,13 +20,14 @@ def generate_all(cfg: ArucoPlateConfig) -> Path:
     black_inlay = create_black_inlay_mesh(cfg)
     black_inlay.export(output_dir / "aruco_plate_black.stl")
 
+    preview_image = render_preview_image(cfg)
     save_preview_image(cfg, output_dir / "aruco_plate_preview.png")
-    save_render_preview(
-        [
-            PreviewMesh(mesh=white_plate, fill_rgb=DEFAULT_BODY_RGB),
-            PreviewMesh(mesh=black_inlay, fill_rgb=DEFAULT_ACCENT_RGB),
-        ],
-        output_dir / "aruco_plate_render.png",
+    save_plate_render_preview(
+        preview_image=preview_image,
+        plate_width_mm=cfg.plate_width_mm,
+        plate_height_mm=cfg.plate_height_mm,
+        plate_thickness_mm=cfg.plate_thickness_mm,
+        path=output_dir / "aruco_plate_render.png",
     )
     _write_run_info(output_dir, cfg)
 
