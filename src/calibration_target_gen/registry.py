@@ -12,6 +12,12 @@ def _build_cube_target() -> BaseTarget:
     return CubeTarget()
 
 
+def _build_charuco_plate_target() -> BaseTarget:
+    from .targets.charuco_plate.adapter import CharucoPlateTarget
+
+    return CharucoPlateTarget()
+
+
 def _build_aruco_plate_target() -> BaseTarget:
     from .targets.aruco_plate.adapter import ArucoPlateTarget
 
@@ -35,6 +41,11 @@ _TARGETS: dict[str, RegisteredTarget] = {
         name="cube",
         description="Existing hollow cube plus marker plate outputs.",
         factory=_build_cube_target,
+    ),
+    "charuco_plate": RegisteredTarget(
+        name="charuco_plate",
+        description="Square 3x3 ChArUco plate with separate white and black AMS-ready STL bodies.",
+        factory=_build_charuco_plate_target,
     ),
 }
 

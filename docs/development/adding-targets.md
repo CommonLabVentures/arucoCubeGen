@@ -13,6 +13,7 @@ src/
     registry.py
     shared/
     targets/
+      charuco_plate/
       cube/
 ```
 
