@@ -6,6 +6,12 @@ from pathlib import Path
 from .board import build_board_metrics, required_marker_count, save_preview_image
 from .config import CharucoPlateConfig
 from .geometry import create_black_inlay_mesh, create_white_plate_mesh
+from ...shared.render import (
+    DEFAULT_ACCENT_RGB,
+    DEFAULT_BODY_RGB,
+    PreviewMesh,
+    save_render_preview,
+)
 
 
 def generate_all(cfg: CharucoPlateConfig) -> Path:
@@ -18,6 +24,13 @@ def generate_all(cfg: CharucoPlateConfig) -> Path:
     black_inlay.export(output_dir / "charuco_plate_black.stl")
 
     save_preview_image(cfg, output_dir / "charuco_plate_preview.png")
+    save_render_preview(
+        [
+            PreviewMesh(mesh=white_plate, fill_rgb=DEFAULT_BODY_RGB),
+            PreviewMesh(mesh=black_inlay, fill_rgb=DEFAULT_ACCENT_RGB),
+        ],
+        output_dir / "charuco_plate_render.png",
+    )
     _write_run_info(output_dir, cfg)
 
     return output_dir.resolve()
@@ -63,6 +76,7 @@ def _write_run_info(output_dir: Path, cfg: CharucoPlateConfig) -> Path:
         "  charuco_plate_white.stl",
         "  charuco_plate_black.stl",
         "  charuco_plate_preview.png",
+        "  charuco_plate_render.png",
         "  run_info.txt",
     ]
 

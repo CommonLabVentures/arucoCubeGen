@@ -10,7 +10,13 @@ def make_output_dir(prefix: str = "out_stls") -> str:
     os.makedirs(out_dir, exist_ok=False)
     return out_dir
 
-def write_run_info(out_dir: str, cfg: Config, plate_size: float, plate_thickness: float) -> str:
+def write_run_info(
+    out_dir: str,
+    cfg: Config,
+    plate_size: float,
+    plate_thickness: float,
+    preview_plate_id: int | None = None,
+) -> str:
     path = os.path.join(out_dir, "run_info.txt")
     with open(path, "w") as f:
         f.write("ArUco Cube Generator – Run Info\n")
@@ -47,5 +53,11 @@ def write_run_info(out_dir: str, cfg: Config, plate_size: float, plate_thickness
         f.write("Generated plate IDs:\n")
         for mid in cfg.plate_ids:
             f.write(f"  - {mid}\n")
+        f.write("\n")
+
+        f.write("Preview renders:\n")
+        f.write("  - cube_render.png\n")
+        if preview_plate_id is not None:
+            f.write(f"  - plate_render.png (ID {preview_plate_id})\n")
 
     return path

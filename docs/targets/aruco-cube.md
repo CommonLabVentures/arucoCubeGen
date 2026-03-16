@@ -61,7 +61,9 @@ python -m src.aruco_cube_gen
 ```text
 out_stls_YYYY-MM-DD_HH-MM-SS/
 ├── cube_with_slots.stl
+├── cube_render.png
 ├── plate_base.stl
+├── plate_render.png
 ├── plate_base_id5.stl
 ├── plate_marker_id5.stl
 ├── plate_combined_id5.stl
@@ -69,6 +71,8 @@ out_stls_YYYY-MM-DD_HH-MM-SS/
 ├── run_info.txt
 └── manifest.json
 ```
+
+The generated `plate_render.png` uses the first configured value in `plate_ids` as its representative preview.
 
 ## Assembly
 

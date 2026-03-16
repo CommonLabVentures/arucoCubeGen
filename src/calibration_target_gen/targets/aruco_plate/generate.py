@@ -6,6 +6,12 @@ from pathlib import Path
 from .board import build_marker_metrics, save_preview_image
 from .config import ArucoPlateConfig
 from .geometry import create_black_inlay_mesh, create_white_plate_mesh
+from ...shared.render import (
+    DEFAULT_ACCENT_RGB,
+    DEFAULT_BODY_RGB,
+    PreviewMesh,
+    save_render_preview,
+)
 
 
 def generate_all(cfg: ArucoPlateConfig) -> Path:
@@ -18,6 +24,13 @@ def generate_all(cfg: ArucoPlateConfig) -> Path:
     black_inlay.export(output_dir / "aruco_plate_black.stl")
 
     save_preview_image(cfg, output_dir / "aruco_plate_preview.png")
+    save_render_preview(
+        [
+            PreviewMesh(mesh=white_plate, fill_rgb=DEFAULT_BODY_RGB),
+            PreviewMesh(mesh=black_inlay, fill_rgb=DEFAULT_ACCENT_RGB),
+        ],
+        output_dir / "aruco_plate_render.png",
+    )
     _write_run_info(output_dir, cfg)
 
     return output_dir.resolve()
@@ -60,6 +73,7 @@ def _write_run_info(output_dir: Path, cfg: ArucoPlateConfig) -> Path:
         "  aruco_plate_white.stl",
         "  aruco_plate_black.stl",
         "  aruco_plate_preview.png",
+        "  aruco_plate_render.png",
         "  run_info.txt",
     ]
 

@@ -14,6 +14,7 @@ This target generates a square 3 x 3 ChArUco plate as two aligned STL bodies for
 - ArUco dictionary: `DICT_4X4_50`
 - Marker IDs: `0, 1, 2, 3`
 - Black pattern exported as a separate inlay body embedded `0.8 mm` into the top of the white plate
+- Each run includes both a flat board preview and a shaded rendered preview
 
 ## Usage
 
@@ -28,6 +29,7 @@ out_charuco_plate_YYYY-MM-DD_HH-MM-SS/
 ├── charuco_plate_white.stl
 ├── charuco_plate_black.stl
 ├── charuco_plate_preview.png
+├── charuco_plate_render.png
 ├── run_info.txt
 └── manifest.json
 ```

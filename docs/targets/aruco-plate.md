@@ -9,6 +9,7 @@ This target generates a rectangular single-marker ArUco plate as two aligned STL
 - Marker ID: `0`
 - Marker size: `83 mm` to maximize use of the limiting plate dimension
 - Black pattern exported as a separate inlay body embedded `0.8 mm` into the top of the white plate
+- Each run includes both a flat pattern preview and a shaded rendered preview
 
 ## Usage
 
@@ -23,6 +24,7 @@ out_aruco_plate_YYYY-MM-DD_HH-MM-SS/
 ├── aruco_plate_white.stl
 ├── aruco_plate_black.stl
 ├── aruco_plate_preview.png
+├── aruco_plate_render.png
 ├── run_info.txt
 └── manifest.json
 ```
