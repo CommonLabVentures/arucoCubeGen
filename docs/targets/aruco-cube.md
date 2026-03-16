@@ -8,9 +8,9 @@ Cube render:
 
 ![ArUco cube render](../../images/cube_render.png)
 
-Plate render:
+Cube face plate render:
 
-![ArUco plate render](../../images/plate_render.png)
+![Cube face plate render](../../images/plate_render.png)
 
 ## What It Produces
 

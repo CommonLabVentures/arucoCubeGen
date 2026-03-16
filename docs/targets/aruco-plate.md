@@ -2,6 +2,10 @@
 
 This target generates a rectangular single-marker ArUco plate as two aligned STL bodies for multi-color printing workflows.
 
+## Render
+
+![ArUco plate render](../../images/aruco_plate_render.png)
+
 ## Default Geometry
 
 - White base plate: `83 mm x 220 mm x 4 mm`
