@@ -6,24 +6,15 @@ from pathlib import Path
 import numpy as np
 
 from .config import ArucoPlateConfig
+from ...shared.aruco import Rectangle, build_marker_black_rectangles
 
 try:
     import cv2
-    from cv2 import aruco
 except ModuleNotFoundError as exc:  # pragma: no cover - depends on local env
     cv2 = None
-    aruco = None
     _OPENCV_IMPORT_ERROR = exc
 else:
     _OPENCV_IMPORT_ERROR = None
-
-
-@dataclass(frozen=True)
-class Rectangle:
-    x_mm: float
-    y_mm: float
-    width_mm: float
-    height_mm: float
 
 
 @dataclass(frozen=True)
@@ -68,27 +59,24 @@ def build_marker_metrics(cfg: ArucoPlateConfig) -> MarkerMetrics:
 
 def build_black_rectangles(cfg: ArucoPlateConfig) -> tuple[Rectangle, ...]:
     metrics = build_marker_metrics(cfg)
-    marker_img = generate_aruco_image(cfg, cfg.marker_id)
-    img_bin = _threshold_image(marker_img)
 
     rectangles: list[Rectangle] = []
-    for marker_row in range(metrics.cells_per_side):
-        for marker_col in range(metrics.cells_per_side):
-            pixel = img_bin[
-                int((marker_row + 0.5) * cfg.aruco_image_size / metrics.cells_per_side),
-                int((marker_col + 0.5) * cfg.aruco_image_size / metrics.cells_per_side),
-            ]
-            if pixel != 0:
-                continue
-            rectangles.append(
-                Rectangle(
-                    x_mm=metrics.marker_origin_x_mm + marker_col * metrics.cell_size_mm,
-                    y_mm=metrics.marker_origin_y_mm
-                    + (metrics.cells_per_side - 1 - marker_row) * metrics.cell_size_mm,
-                    width_mm=metrics.cell_size_mm,
-                    height_mm=metrics.cell_size_mm,
-                )
+    for rect in build_marker_black_rectangles(
+        marker_id=cfg.marker_id,
+        marker_size_mm=metrics.marker_size_mm,
+        aruco_marker_bits=cfg.aruco_marker_bits,
+        aruco_border_bits=cfg.aruco_border_bits,
+        aruco_dict_name=cfg.aruco_dict_name,
+        aruco_image_size=cfg.aruco_image_size,
+    ):
+        rectangles.append(
+            Rectangle(
+                x_mm=metrics.marker_origin_x_mm + rect.x_mm,
+                y_mm=metrics.marker_origin_y_mm + rect.y_mm,
+                width_mm=rect.width_mm,
+                height_mm=rect.height_mm,
             )
+        )
 
     if not rectangles:
         raise RuntimeError(f"No black geometry was generated for marker ID {cfg.marker_id}.")
@@ -131,47 +119,8 @@ def save_preview_image(cfg: ArucoPlateConfig, path: Path) -> Path:
     return path
 
 
-def generate_aruco_image(cfg: ArucoPlateConfig, marker_id: int) -> np.ndarray:
-    _require_opencv()
-    dictionary = _get_dictionary(cfg)
-
-    if hasattr(aruco, "generateImageMarker"):
-        return aruco.generateImageMarker(
-            dictionary,
-            marker_id,
-            cfg.aruco_image_size,
-            borderBits=cfg.aruco_border_bits,
-        )
-    if hasattr(aruco, "drawMarker"):
-        return aruco.drawMarker(
-            dictionary,
-            marker_id,
-            cfg.aruco_image_size,
-            borderBits=cfg.aruco_border_bits,
-        )
-    raise RuntimeError(
-        "OpenCV ArUco API missing drawMarker/generateImageMarker. "
-        "Install opencv-contrib-python."
-    )
-
-
-def _threshold_image(img: np.ndarray) -> np.ndarray:
-    _require_opencv()
-    _, img_bin = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
-    return img_bin
-
-
-def _get_dictionary(cfg: ArucoPlateConfig):
-    _require_opencv()
-    try:
-        dict_id = getattr(aruco, cfg.aruco_dict_name)
-    except AttributeError as exc:
-        raise ValueError(f"Unknown ArUco dictionary '{cfg.aruco_dict_name}'.") from exc
-    return aruco.getPredefinedDictionary(dict_id)
-
-
 def _require_opencv() -> None:
-    if cv2 is None or aruco is None:
+    if cv2 is None:
         raise RuntimeError(
             "opencv-contrib-python is required to generate ArUco plate targets."
         ) from _OPENCV_IMPORT_ERROR

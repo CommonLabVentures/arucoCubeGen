@@ -2,7 +2,7 @@
 
 This repository contains code for generating calibration targets used in robot workcells.
 
-The long-term intent is to support multiple target families and output formats from one codebase. The current implemented targets are an ArUco calibration cube with matching marker plates, a rectangular single-marker ArUco plate, and a square ChArUco plate.
+The long-term intent is to support multiple target families and output formats from one codebase. The current implemented targets are an ArUco calibration cube with matching marker plates, a rectangular single-marker ArUco plate, a square ChArUco plate, and printable A4 ArUco marker sheets.
 
 ## Current Scope
 
@@ -12,6 +12,7 @@ The long-term intent is to support multiple target families and output formats f
   - ArUco cube and marker plates
   - Rectangular single-marker ArUco plate with separate white and black STL bodies
   - Square ChArUco plate with separate white and black STL bodies
+  - Printable A4 ArUco marker sheets in PDF format
 
 ## Quick Start
 
@@ -21,6 +22,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 python -m src.calibration_target_gen --list-targets
 python -m src.calibration_target_gen cube
+python -m src.calibration_target_gen aruco_a4_sheet
 python -m src.calibration_target_gen aruco_plate
 python -m src.calibration_target_gen charuco_plate
 ```
@@ -35,6 +37,7 @@ python -m src.aruco_cube_gen
 
 - [ArUco cube target guide](docs/targets/aruco-cube.md)
 - [ArUco plate target guide](docs/targets/aruco-plate.md)
+- [Printable A4 ArUco sheet guide](docs/targets/aruco-a4-sheet.md)
 - [ArUco cube design notes](docs/targets/aruco-cube-design.md)
 - [ChArUco plate target guide](docs/targets/charuco-plate.md)
 - [Adding new target families](docs/development/adding-targets.md)

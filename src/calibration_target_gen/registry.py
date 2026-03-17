@@ -24,6 +24,12 @@ def _build_aruco_plate_target() -> BaseTarget:
     return ArucoPlateTarget()
 
 
+def _build_aruco_a4_sheet_target() -> BaseTarget:
+    from .targets.aruco_a4_sheet.adapter import ArucoA4SheetTarget
+
+    return ArucoA4SheetTarget()
+
+
 @dataclass(frozen=True)
 class RegisteredTarget:
     name: str
@@ -32,6 +38,11 @@ class RegisteredTarget:
 
 
 _TARGETS: dict[str, RegisteredTarget] = {
+    "aruco_a4_sheet": RegisteredTarget(
+        name="aruco_a4_sheet",
+        description="Multi-page printable A4 ArUco marker sheets with a centered 150 mm marker and 10 mm grid.",
+        factory=_build_aruco_a4_sheet_target,
+    ),
     "aruco_plate": RegisteredTarget(
         name="aruco_plate",
         description="Rectangular single-marker ArUco plate with separate white and black AMS-ready STL bodies.",
